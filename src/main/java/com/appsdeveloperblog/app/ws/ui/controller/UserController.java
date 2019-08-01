@@ -1,5 +1,6 @@
 package com.appsdeveloperblog.app.ws.ui.controller;
 
+import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.model.request.UpdateUserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
