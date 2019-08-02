@@ -1,24 +1,26 @@
 package com.appsdeveloperblog.app.ws.ui.controller;
 
-import com.appsdeveloperblog.app.ws.exceptions.UserServiceException;
 import com.appsdeveloperblog.app.ws.model.request.UpdateUserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
+import com.appsdeveloperblog.app.ws.userservice.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("users") // http://localhost:8080/users
 public class UserController {
 
     Map<String, UserRest> users;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping()
     public String getUsers(@RequestParam(value="page", defaultValue = "1") int page,
@@ -51,20 +53,11 @@ public class UserController {
     })
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails) {
 
-        UserRest returnValue = new UserRest();
-        returnValue.setEmail(userDetails.getEmail());
-        returnValue.setFristName(userDetails.getFirstName());
-        returnValue.setLastName(userDetails.getLastName());
-
-        String userId = UUID.randomUUID().toString();
-        returnValue.setUserId(userId);
-
-        if(users == null) users = new HashMap<>();
-
-        users.put(userId, returnValue);
+        UserRest returnValue = userService.createUser(userDetails);
 
         return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
     }
+
 
     @PutMapping(path="/{userId}",
             consumes = {
